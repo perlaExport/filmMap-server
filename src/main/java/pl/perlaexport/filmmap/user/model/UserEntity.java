@@ -2,6 +2,7 @@ package pl.perlaexport.filmmap.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
@@ -29,6 +31,7 @@ public class UserEntity {
     private String name;
     @JsonIgnore
     private String password;
+    @Builder.Default
     private boolean enabled = false;
     @NotNull
     @Enumerated(EnumType.STRING)
