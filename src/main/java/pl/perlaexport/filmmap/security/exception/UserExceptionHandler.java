@@ -18,7 +18,7 @@ public class UserExceptionHandler {
         return ex.getMessage();
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(LocalAccountException.class)
+    @ExceptionHandler(EmailNotFoundException.class)
     public String getEmailNotFoundException(EmailNotFoundException ex){
         return ex.getMessage();
     }
