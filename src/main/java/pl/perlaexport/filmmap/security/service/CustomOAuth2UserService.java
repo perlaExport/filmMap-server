@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import pl.perlaexport.filmmap.security.exception.EmailNotFoundException;
+import pl.perlaexport.filmmap.security.exception.LocalAccountException;
 import pl.perlaexport.filmmap.security.user.GoogleUser;
 import pl.perlaexport.filmmap.security.user.UserPrincipal;
 import pl.perlaexport.filmmap.user.model.AuthType;
@@ -43,14 +45,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         GoogleUser googleUser = new GoogleUser(oAuth2User.getAttributes());
         if (StringUtils.isEmpty(googleUser.getEmail())) {
-            throw new RuntimeException("Email not found from OAuth2 provider");
+            throw new EmailNotFoundException(googleUser.getEmail());
         }
         Optional<UserEntity> userOptional = userRepository.findByEmail(googleUser.getEmail());
         UserEntity user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
             if (!user.getAuthType().equals(AuthType.GOOGLE))
-                throw new RuntimeException("Use local account to login");
+                throw new LocalAccountException();
             user = updateExistingUser(user, googleUser);
         } else {
             user = registerNewUser(oAuth2UserRequest, googleUser);

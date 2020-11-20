@@ -26,8 +26,4 @@ public class LoginController {
         return loginService.login(loginDto);
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "TEST OK";
-    }
 }

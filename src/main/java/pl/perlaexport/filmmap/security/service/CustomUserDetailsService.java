@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.perlaexport.filmmap.security.exception.EmailNotFoundException;
 import pl.perlaexport.filmmap.security.exception.UserNotFoundException;
 import pl.perlaexport.filmmap.security.user.UserPrincipal;
 import pl.perlaexport.filmmap.user.model.UserEntity;
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email : " + email)
+                        new EmailNotFoundException(email)
                 );
 
         return UserPrincipal.create(user);
