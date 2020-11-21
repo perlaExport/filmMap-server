@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.perlaexport.filmmap.rating.model.RatingEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -37,5 +40,8 @@ public class UserEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthType authType;
+    @JsonIgnore
+    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL)
+    private List<RatingEntity> ratingEntityList = new ArrayList<>();
 }
 

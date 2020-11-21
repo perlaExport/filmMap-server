@@ -13,7 +13,9 @@ import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,8 +35,10 @@ public class MovieEntity {
     @NotNull
     @NotBlank
     private String title;
-
     @JsonBackReference
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "movieEntities")
     Set<CategoryEntity> categoryEntities = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL)
+    private List<RatingEntity> ratingEntityList = new ArrayList<>();
 }
