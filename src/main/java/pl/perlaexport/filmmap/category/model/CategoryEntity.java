@@ -29,7 +29,7 @@ public class CategoryEntity {
     private Long id;
     @NotNull
     @NotBlank
-    private String category_name;
+    private String categoryName;
 
     @JsonManagedReference
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
@@ -38,6 +38,6 @@ public class CategoryEntity {
             joinColumns = { @JoinColumn(name = "category_id") },
             inverseJoinColumns = { @JoinColumn(name = "movie_id") }
     )
-    private Set<MovieEntity> movieEntities = new HashSet<>();
+    private Set<MovieEntity> movies = new HashSet<>();
 
 }

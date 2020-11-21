@@ -27,10 +27,10 @@ public class RatingEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "movie_id")
-    private MovieEntity movie_id;
+    private MovieEntity movie;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
-    private UserEntity user_id;
+    private UserEntity user;
 
 }
