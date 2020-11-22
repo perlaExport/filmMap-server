@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.perlaexport.filmmap.category.model.CategoryEntity;
-import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 
 import javax.persistence.*;
@@ -26,9 +25,8 @@ import java.util.Set;
 @Table(name = "movie")
 public class MovieEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
-    private Long id;
+    private String id;
     @NotNull
     @NotBlank
     private double rating;
