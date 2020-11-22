@@ -39,6 +39,6 @@ public class MovieEntity {
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "movies")
     Set<CategoryEntity> categories = new HashSet<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<RatingEntity> ratings = new ArrayList<>();
 }
