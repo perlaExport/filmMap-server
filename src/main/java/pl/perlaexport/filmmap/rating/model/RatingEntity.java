@@ -24,7 +24,7 @@ public class RatingEntity {
     @Column(name = "rating_id")
     private Long id;
     @NotNull
-    private double rating;
+    private int rating;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "movie_id")

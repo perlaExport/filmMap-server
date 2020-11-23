@@ -9,6 +9,7 @@ import pl.perlaexport.filmmap.movie.exception.MovieAlreadyExistsException;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
+import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.rating.exception.BadRatingRangeException;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.rating.repository.RatingRepository;
@@ -51,10 +52,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieEntity getMovie(String movieId) {
-        return movieRepository.findById(movieId).orElseThrow(
+    public MovieResponse getMovie(String movieId, UserEntity user) {
+        MovieEntity movie =  movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
+        Optional<RatingEntity> ratingEntity = movie.getRatings().stream().filter(e -> user.equals(e.getUser())).findAny();
+        int userRate = ratingEntity.map(RatingEntity::getRating).orElse(0);
+        return new MovieResponse(movieId,movie.getRating(),userRate);
     }
 
     @Override

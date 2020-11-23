@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
+import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.movie.service.MovieService;
 import pl.perlaexport.filmmap.user.current.CurrentUser;
 
@@ -29,7 +30,7 @@ public class MovieController {
         return movieService.rateMovie(id,rate,CurrentUser.get(request));
     }
     @GetMapping("/movie/{id}")
-    public MovieEntity getMovie(@PathVariable String id){
-        return movieService.getMovie(id);
+    public MovieResponse getMovie(@PathVariable String id, HttpServletRequest request){
+        return movieService.getMovie(id,CurrentUser.get(request));
     }
 }
