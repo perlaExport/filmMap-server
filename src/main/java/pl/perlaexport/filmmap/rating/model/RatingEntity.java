@@ -1,5 +1,6 @@
 package pl.perlaexport.filmmap.rating.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
