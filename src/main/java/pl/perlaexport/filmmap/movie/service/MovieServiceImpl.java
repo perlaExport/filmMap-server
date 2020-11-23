@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.perlaexport.filmmap.category.model.CategoryEntity;
 import pl.perlaexport.filmmap.category.repository.CategoryRepository;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
+import pl.perlaexport.filmmap.movie.exception.MovieAlreadyExistsException;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
@@ -39,6 +40,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieEntity addMovie(MovieDto movieDto, UserEntity user) {
+        if (movieRepository.findById(movieDto.getId()).isPresent())
+            throw new MovieAlreadyExistsException(movieDto.getId());
         MovieEntity movie = MovieEntity.builder().id(movieDto.getId()).
                 title(movieDto.getTitle()).categories(getCategories(movieDto.getCategories())).build();
         RatingEntity rating = RatingEntity.builder().movie(movie).user(user).rating(movieDto.getRating()).build();

@@ -13,5 +13,10 @@ public class MovieExceptionHandler {
     public String getMovieNotFoundException(MovieNotFoundException ex){
         return ex.getMessage();
     }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(MovieAlreadyExistsException.class)
+    public String getMovieAlreadyExistsException(MovieAlreadyExistsException ex){
+        return ex.getMessage();
+    }
 }
 
