@@ -1,5 +1,6 @@
 package pl.perlaexport.filmmap.rating.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class RatingEntity {
     @Column(name = "rating_id")
     private Long id;
     @NotNull
-    private double rating;
+    private int rating;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "movie_id")

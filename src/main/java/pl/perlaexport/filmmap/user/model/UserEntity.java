@@ -41,7 +41,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private AuthType authType;
     @JsonIgnore
-    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<RatingEntity> ratings = new ArrayList<>();
 }
 
