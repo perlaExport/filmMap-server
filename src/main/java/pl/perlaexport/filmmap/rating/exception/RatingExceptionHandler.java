@@ -12,4 +12,9 @@ public class RatingExceptionHandler {
     public String getBadRatingException(BadRatingRangeException ex) {
         return ex.getMessage();
     }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(RatingNotFoundException.class)
+    public String getRatingNotFoundException(RatingNotFoundException ex){
+        return ex.getMessage();
+    }
 }

@@ -11,6 +11,7 @@ import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.rating.exception.BadRatingRangeException;
+import pl.perlaexport.filmmap.rating.exception.RatingNotFoundException;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.user.model.UserEntity;
@@ -40,7 +41,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieEntity addMovie(MovieDto movieDto, UserEntity user) {
+    public MovieResponse addMovie(MovieDto movieDto, UserEntity user) {
         if (movieRepository.findById(movieDto.getId()).isPresent())
             throw new MovieAlreadyExistsException(movieDto.getId());
         MovieEntity movie = MovieEntity.builder().id(movieDto.getId()).
@@ -48,7 +49,8 @@ public class MovieServiceImpl implements MovieService {
         RatingEntity rating = RatingEntity.builder().movie(movie).user(user).rating(movieDto.getRating()).build();
         movie.getRatings().add(rating);
         movie.calcRating();
-        return movieRepository.save(movie);
+        movieRepository.save(movie);
+        return new MovieResponse(movie.getId(),movie.getRating(),rating.getRating());
     }
 
     @Override
@@ -62,7 +64,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieEntity rateMovie(String movieId, Integer rating, UserEntity user) {
+    public MovieResponse rateMovie(String movieId, Integer rating, UserEntity user) {
         MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
@@ -74,7 +76,23 @@ public class MovieServiceImpl implements MovieService {
         } else
             userRating.get().setRating(validRating(rating));
         movie.calcRating();
-        return movieRepository.save(movie);
+        movieRepository.save(movie);
+        return new MovieResponse(movieId,movie.getRating(),rating);
+    }
+
+    @Override
+    public MovieResponse deleteRating(String movieId, UserEntity user) {
+        MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
+                () -> new MovieNotFoundException(movieId)
+        );
+        RatingEntity rating = ratingRepository.findByMovieAndUser(movie,user).orElseThrow(
+                () -> new RatingNotFoundException(movieId,user.getEmail())
+        );
+        movie.getRatings().remove(rating);
+        movie.calcRating();
+        movieRepository.save(movie);
+        ratingRepository.delete(rating);
+        return new MovieResponse(movieId,movie.getRating(),0);
     }
 
     private Set<CategoryEntity> getCategories(List<String> categories) {

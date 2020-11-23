@@ -9,7 +9,8 @@ import pl.perlaexport.filmmap.user.model.UserEntity;
 import java.util.List;
 
 public interface MovieService {
-    MovieEntity addMovie(MovieDto movieDto, UserEntity user);
+    MovieResponse addMovie(MovieDto movieDto, UserEntity user);
     MovieResponse getMovie(String movieId, UserEntity user);
-    MovieEntity rateMovie(String movieId, Integer rating, UserEntity user);
+    MovieResponse rateMovie(String movieId, Integer rating, UserEntity user);
+    MovieResponse deleteRating(String movieId, UserEntity user);
 }
