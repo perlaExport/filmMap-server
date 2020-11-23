@@ -1,9 +1,7 @@
 package pl.perlaexport.filmmap.movie.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.service.MovieService;
@@ -24,5 +22,14 @@ public class MovieController {
     @PostMapping("/movie/add")
     public MovieEntity addMovie(@Valid @RequestBody MovieDto movieDto, HttpServletRequest request){
         return movieService.addMovie(movieDto, CurrentUser.get(request));
+    }
+    @PutMapping("/movie/{id}/rate")
+    public MovieEntity rateMovie(@PathVariable String id, @RequestParam(name="rate") Integer rate,
+                                 HttpServletRequest request){
+        return movieService.rateMovie(id,rate,CurrentUser.get(request));
+    }
+    @GetMapping("/movie/{id}")
+    public MovieEntity getMovie(@PathVariable String id){
+        return movieService.getMovie(id);
     }
 }

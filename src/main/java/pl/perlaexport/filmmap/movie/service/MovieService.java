@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface MovieService {
     MovieEntity addMovie(MovieDto movieDto, UserEntity user);
+    MovieEntity getMovie(String movieId);
+    MovieEntity rateMovie(String movieId, Integer rating, UserEntity user);
 }
