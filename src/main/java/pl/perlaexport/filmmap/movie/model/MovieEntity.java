@@ -28,15 +28,20 @@ public class MovieEntity {
     @Column(name = "movie_id")
     private String id;
     @NotNull
-    @NotBlank
     private double rating;
     @NotNull
     @NotBlank
     private String title;
     @JsonBackReference
+    @Builder.Default
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "movies")
     Set<CategoryEntity> categories = new HashSet<>();
     @JsonIgnore
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<RatingEntity> ratings = new ArrayList<>();
+
+    public void calcRating(){
+        setRating(getRatings().stream().mapToDouble(RatingEntity::getRating).average().orElse(0d));
+    }
 }

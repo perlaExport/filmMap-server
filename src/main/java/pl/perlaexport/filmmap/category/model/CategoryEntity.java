@@ -31,6 +31,7 @@ public class CategoryEntity {
     @NotBlank
     private String categoryName;
 
+    @Builder.Default
     @JsonManagedReference
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinTable(
