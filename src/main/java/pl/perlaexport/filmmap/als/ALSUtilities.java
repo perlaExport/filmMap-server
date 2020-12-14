@@ -4,6 +4,8 @@ import java.util.List;
 
 public class ALSUtilities {
 
+    public static int D = 10;
+
     public static int[] getIndex(int[] column) {
         List<Integer> temp = new ArrayList<>();
         for (int i = 0; i < column.length; i++) {
@@ -46,7 +48,7 @@ public class ALSUtilities {
     }
 
     public static double[][] createFromIndexes(double[][] input, int[] indexes) {
-        double[][] result = new double[Main.D][indexes.length];
+        double[][] result = new double[D][indexes.length];
         for (int i = 0; i <indexes.length; i++){
             setColumn(result,getColumnDouble(input, indexes[i]),i);
         }
@@ -127,7 +129,7 @@ public class ALSUtilities {
     }
 
     public static double[] getVector(int[] indexes, double[][] matrix, int[] column) {
-        double[] result = new double[Main.D];
+        double[] result = new double[D];
         for (int i = 0; i < indexes.length; i++) {
             result = sumMatrixesOneDim(result, multiplyMatrixesByNumberOneDim(column[indexes[i]], getColumnDouble(matrix, indexes[i])));
         }
