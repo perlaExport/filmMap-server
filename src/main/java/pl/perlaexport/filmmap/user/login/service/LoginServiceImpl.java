@@ -37,8 +37,10 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseLogin login(LoginDto loginDto) {
         Optional<UserEntity> user = userRepository.findByEmail(loginDto.getEmail());
-        if (user.isEmpty() || !passwordEncoder.matches(loginDto.getPassword(),user.get().getPassword()))
-            return new ResponseLoginFailure();
+        if (user.isEmpty())
+            return new ResponseLoginFailure("email not found", "");
+        if (!passwordEncoder.matches(loginDto.getPassword(),user.get().getPassword()))
+            return new ResponseLoginFailure("wrong email","wrong password");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getEmail(),

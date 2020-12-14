@@ -1,18 +1,15 @@
 package pl.perlaexport.filmmap.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Data
@@ -40,9 +37,45 @@ public class UserEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthType authType;
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private List<RatingEntity> ratings = new ArrayList<>();
+
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @Builder.Default
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "favourites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    Set<MovieEntity> favouriteMovies = new LinkedHashSet<>();
+
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @Builder.Default
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "watch_later",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    Set<MovieEntity> watchLaterMovies = new LinkedHashSet<>();
+
+    public int getUserRate(MovieEntity movie){
+        return ratings.stream().filter(e -> e.getUser() == this).mapToInt(RatingEntity::getRating).findAny().orElse(0);
+    }
+
+    public boolean isFavouriteMovie(MovieEntity movie){
+        return favouriteMovies.contains(movie);
+    }
+
+    public boolean isToWatchLaterMovie(MovieEntity movie){
+        return watchLaterMovies.contains(movie);
+    }
+
 }
 
