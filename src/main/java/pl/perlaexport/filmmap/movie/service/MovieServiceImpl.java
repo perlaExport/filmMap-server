@@ -27,16 +27,14 @@ public class MovieServiceImpl implements MovieService {
 
     private CategoryRepository categoryRepository;
     private MovieRepository movieRepository;
-    private UserRepository userRepository;
     private RatingRepository ratingRepository;
 
 
     @Autowired
     public MovieServiceImpl(CategoryRepository categoryRepository, MovieRepository movieRepository,
-                            UserRepository userRepository, RatingRepository ratingRepository) {
+                            RatingRepository ratingRepository) {
         this.categoryRepository = categoryRepository;
         this.movieRepository = movieRepository;
-        this.userRepository = userRepository;
         this.ratingRepository = ratingRepository;
     }
 
@@ -50,7 +48,8 @@ public class MovieServiceImpl implements MovieService {
         movie.getRatings().add(rating);
         movie.calcRating();
         movieRepository.save(movie);
-        return new MovieResponse(movie.getId(),movie.getRating(),rating.getRating());
+        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
+                userRate(rating.getRating()).build();
     }
 
     @Override
@@ -58,9 +57,9 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movie =  movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
-        Optional<RatingEntity> ratingEntity = movie.getRatings().stream().filter(e -> user.equals(e.getUser())).findAny();
-        int userRate = ratingEntity.map(RatingEntity::getRating).orElse(0);
-        return new MovieResponse(movieId,movie.getRating(),userRate);
+        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
+                userRate(user.getUserRate(movie)).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).build();
     }
 
     @Override
@@ -77,7 +76,9 @@ public class MovieServiceImpl implements MovieService {
             userRating.get().setRating(validRating(rating));
         movie.calcRating();
         movieRepository.save(movie);
-        return new MovieResponse(movieId,movie.getRating(),rating);
+        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
+                userRate(rating).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).build();
     }
 
     @Override
@@ -92,7 +93,9 @@ public class MovieServiceImpl implements MovieService {
         movie.calcRating();
         movieRepository.save(movie);
         ratingRepository.delete(rating);
-        return new MovieResponse(movieId,movie.getRating(),0);
+        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
+                userRate(0).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).build();
     }
 
     private Set<CategoryEntity> getCategories(List<String> categories) {
@@ -110,9 +113,10 @@ public class MovieServiceImpl implements MovieService {
         return finalCategories;
     }
 
-    private Integer validRating(Integer rating) {
+    private int validRating(Integer rating) {
         if (rating < 1 || rating > 5)
             throw new BadRatingRangeException(rating);
         return rating;
     }
+
 }
