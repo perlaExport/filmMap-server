@@ -3,6 +3,7 @@ package pl.perlaexport.filmmap.user.current;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import pl.perlaexport.filmmap.security.exception.UserNotAuthenticatedException;
 import pl.perlaexport.filmmap.security.exception.UserNotFoundException;
 import pl.perlaexport.filmmap.security.jwt.TokenAuthenticationFilter;
 import pl.perlaexport.filmmap.security.jwt.TokenProvider;
@@ -28,7 +29,7 @@ public class CurrentUser {
     public static UserEntity get(HttpServletRequest request) {
         String token = tokenAuthenticationFilter.getJwtFromRequest(request);
         return  userRepository.findById(tokenProvider.getUserIdFromToken(token)).orElseThrow( () ->
-                new UserNotFoundException(tokenProvider.getUserIdFromToken(token))
+                new UserNotAuthenticatedException(tokenProvider.getUserIdFromToken(token))
         );
     }
 }
