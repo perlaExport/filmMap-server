@@ -23,4 +23,9 @@ public class UserExceptionHandler {
     public ExceptionResponse getEmailNotFoundException(EmailNotFoundException ex){
         return new ExceptionResponse(ex.getMessage());
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    public ExceptionResponse getUserNotAuthenticatedException(UserNotAuthenticatedException ex){
+        return new ExceptionResponse(ex.getMessage());
+    }
 }
