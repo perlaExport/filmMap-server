@@ -19,5 +19,10 @@ public class MovieExceptionHandler {
     public ExceptionResponse getMovieAlreadyExistsException(MovieAlreadyExistsException ex){
         return new ExceptionResponse(ex.getMessage());
     }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotMoviesInDatabaseException.class)
+    public ExceptionResponse getNotMoviesInDatabaseException(NotMoviesInDatabaseException ex){
+        return new ExceptionResponse(ex.getMessage());
+    }
 }
 
