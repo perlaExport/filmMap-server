@@ -24,10 +24,14 @@ public class MovieEntity {
     private String id;
     @NotNull
     @EqualsAndHashCode.Exclude
-    private double rating;
+    @Builder.Default
+    private double rating = 0.0;
     @NotNull
     @NotBlank
     private String title;
+    @NotNull
+    @NotBlank
+    private String imgPath;
     @EqualsAndHashCode.Exclude
     @JsonBackReference
     @Builder.Default

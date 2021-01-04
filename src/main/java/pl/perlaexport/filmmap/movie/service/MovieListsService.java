@@ -1,6 +1,7 @@
 package pl.perlaexport.filmmap.movie.service;
 
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
+import pl.perlaexport.filmmap.movie.response.MovieListResponse;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
@@ -15,7 +16,9 @@ public interface MovieListsService {
 
     MovieResponse deleteMovieFromWatchLater(String movieId, UserEntity user);
 
-    List<MovieEntity> getUserFavouritesMovies(UserEntity user);
+    MovieListResponse getUserFavouritesMovies(UserEntity user, int limit, int page);
 
-    List<MovieEntity> getUserWatchLaterMovies(UserEntity user);
+    MovieListResponse getUserWatchLaterMovies(UserEntity user, int limit, int page);
+
+    MovieListResponse getUserRatedMovies(UserEntity user, int limit, int page);
 }

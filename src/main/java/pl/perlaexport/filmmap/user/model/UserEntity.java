@@ -52,7 +52,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id")
     )
-    Set<MovieEntity> favouriteMovies = new LinkedHashSet<>();
+    List<MovieEntity> favouriteMovies = new ArrayList<>();
 
     @EqualsAndHashCode.Exclude
     @JsonIgnore
@@ -63,10 +63,10 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id")
     )
-    Set<MovieEntity> watchLaterMovies = new LinkedHashSet<>();
+    List<MovieEntity> watchLaterMovies = new ArrayList<>();
 
     public int getUserRate(MovieEntity movie){
-        return ratings.stream().filter(e -> e.getUser() == this).mapToInt(RatingEntity::getRating).findAny().orElse(0);
+        return ratings.stream().filter(e -> e.getUser() == this && e.getMovie().equals(movie)).mapToInt(RatingEntity::getRating).findFirst().orElse(0);
     }
 
     public boolean isFavouriteMovie(MovieEntity movie){

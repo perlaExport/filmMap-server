@@ -2,13 +2,12 @@ package pl.perlaexport.filmmap.movie.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.perlaexport.filmmap.movie.model.MovieEntity;
+import pl.perlaexport.filmmap.movie.response.MovieListResponse;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.movie.service.MovieListsService;
 import pl.perlaexport.filmmap.user.current.CurrentUser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 public class MovieListsController {
@@ -21,13 +20,18 @@ public class MovieListsController {
     }
 
     @GetMapping("/movie/favourites")
-    public List<MovieEntity> getFavourites(HttpServletRequest request){
-        return movieListsService.getUserFavouritesMovies(CurrentUser.get(request));
+    public MovieListResponse getFavourites(HttpServletRequest request, @RequestParam Integer limit, @RequestParam Integer page){
+        return movieListsService.getUserFavouritesMovies(CurrentUser.get(request), limit, page);
     }
 
     @GetMapping("/movie/watch_later")
-    public List<MovieEntity> getWatchLaterMovies(HttpServletRequest request){
-        return movieListsService.getUserWatchLaterMovies(CurrentUser.get(request));
+    public MovieListResponse getWatchLaterMovies(HttpServletRequest request, @RequestParam Integer limit, @RequestParam Integer page){
+        return movieListsService.getUserWatchLaterMovies(CurrentUser.get(request), limit, page);
+    }
+
+    @GetMapping("/movie/rated")
+    public MovieListResponse getUserRatedMovies(HttpServletRequest request, @RequestParam Integer limit, @RequestParam Integer page){
+        return movieListsService.getUserRatedMovies(CurrentUser.get(request), limit, page);
     }
 
     @PostMapping("/movie/favourites/add/{movieId}")
