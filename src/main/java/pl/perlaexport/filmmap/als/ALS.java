@@ -1,6 +1,10 @@
 package pl.perlaexport.filmmap.als;
 
 public class ALS {
+    public static double[][] getResult(double[][] U, double[][] P) {
+        return ALSUtilities.multiplyMatrixes(ALSUtilities.transpose(U), P);
+    }
+
     public static double[][] getALS(int[][] R) {
         double[][] P = Generator.generateRandomMatrix(ALSUtilities.D, R[0].length);
         double[][] U = Generator.generateRandomMatrix(ALSUtilities.D, R.length);
