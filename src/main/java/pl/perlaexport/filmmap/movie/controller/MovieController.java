@@ -37,4 +37,8 @@ public class MovieController {
     public MovieResponse getMovie(@PathVariable String id, HttpServletRequest request){
         return movieService.getMovie(id,CurrentUser.get(request));
     }
+    @GetMapping("/movie/random")
+    public MovieResponse getRandomMovie(HttpServletRequest request){
+        return movieService.getRandomMovie(CurrentUser.get(request));
+    }
 }

@@ -7,6 +7,7 @@ import pl.perlaexport.filmmap.category.repository.CategoryRepository;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
 import pl.perlaexport.filmmap.movie.exception.MovieAlreadyExistsException;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
+import pl.perlaexport.filmmap.movie.exception.NotMoviesInDatabaseException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
@@ -17,10 +18,8 @@ import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -96,6 +95,17 @@ public class MovieServiceImpl implements MovieService {
         return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
                 userRate(0).isFavourite(user.isFavouriteMovie(movie)).
                 isWatchLater(user.isToWatchLaterMovie(movie)).build();
+    }
+
+    @Override
+    public MovieResponse getRandomMovie(UserEntity user) {
+        List<MovieEntity> movies = (List<MovieEntity>) movieRepository.findAll();
+        movies.removeAll(user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
+        if (movies.isEmpty())
+            throw new NotMoviesInDatabaseException();
+        MovieEntity movie = movies.get(new Random().nextInt(movies.size()));
+        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
+                isWatchLater(user.isToWatchLaterMovie(movie)).isFavourite(user.isFavouriteMovie(movie)).build();
     }
 
     private Set<CategoryEntity> getCategories(List<String> categories) {
