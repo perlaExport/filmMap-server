@@ -6,6 +6,8 @@ public class ALSUtilities {
 
     public static int D = 1;
 
+    public static final double Lambda = 0.1;
+
     public static int[] getIndex(int[] column) {
         List<Integer> temp = new ArrayList<>();
         for (int i = 0; i < column.length; i++) {
