@@ -42,13 +42,10 @@ public class MovieServiceImpl implements MovieService {
         if (movieRepository.findById(movieDto.getId()).isPresent())
             throw new MovieAlreadyExistsException(movieDto.getId());
         MovieEntity movie = MovieEntity.builder().id(movieDto.getId()).
-                title(movieDto.getTitle()).categories(getCategories(movieDto.getCategories())).build();
-        RatingEntity rating = RatingEntity.builder().movie(movie).user(user).rating(movieDto.getRating()).build();
-        movie.getRatings().add(rating);
-        movie.calcRating();
+                title(movieDto.getTitle()).categories(getCategories(movieDto.getCategories())).imgPath(movieDto.getImgPath()).build();
         movieRepository.save(movie);
         return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
-                userRate(rating.getRating()).build();
+                userRate(0).build();
     }
 
     @Override

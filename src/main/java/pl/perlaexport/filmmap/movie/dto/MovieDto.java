@@ -22,6 +22,4 @@ public class MovieDto {
     @NotBlank(message = "imgPath cannot be blank")
     String imgPath;
     List<String> categories;
-    @NotNull(message = "Rating is obligatory")
-    Integer rating;
 }
