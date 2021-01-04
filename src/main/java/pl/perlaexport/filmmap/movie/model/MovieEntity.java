@@ -28,6 +28,9 @@ public class MovieEntity {
     @NotNull
     @NotBlank
     private String title;
+    @NotNull
+    @NotBlank
+    private String imgPath;
     @EqualsAndHashCode.Exclude
     @JsonBackReference
     @Builder.Default
