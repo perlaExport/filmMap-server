@@ -5,11 +5,14 @@ import org.springframework.stereotype.Service;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
+import pl.perlaexport.filmmap.movie.response.MovieListResponse;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
+import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieListsServiceImpl implements MovieListsService {
@@ -72,16 +75,30 @@ public class MovieListsServiceImpl implements MovieListsService {
     }
 
     @Override
-    public List<MovieEntity> getUserFavouritesMovies(UserEntity user) {
-        List<MovieEntity> favourites = new ArrayList<>(user.getFavouriteMovies());
-        Collections.reverse(favourites);
-        return favourites;
+    public MovieListResponse getUserFavouritesMovies(UserEntity user, int limit, int page) {
+        return getMovieListResponse(limit, page, user.getFavouriteMovies());
     }
 
     @Override
-    public List<MovieEntity> getUserWatchLaterMovies(UserEntity user) {
-        List<MovieEntity> watchLaterMovies = new ArrayList<>(user.getWatchLaterMovies());
-        Collections.reverse(watchLaterMovies);
-        return watchLaterMovies;
+    public MovieListResponse getUserWatchLaterMovies(UserEntity user, int limit, int page) {
+        return getMovieListResponse(limit, page, user.getWatchLaterMovies());
     }
+
+    @Override
+    public MovieListResponse getUserRatedMovies(UserEntity user, int limit, int page) {
+        return getMovieListResponse(limit, page,
+                user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
+    }
+
+    private MovieListResponse getMovieListResponse(int limit, int page, List<MovieEntity> list) {
+        if (list.isEmpty())
+            return new MovieListResponse(new ArrayList<>(),1,1);
+        Collections.reverse(list);
+        int listSize = list.size();
+        int start = Math.min(page * limit, listSize - 1);
+        int end = Math.min(page * limit + limit, listSize);
+        int amountOfPages = (int) Math.ceil((double) listSize / limit);
+        return new MovieListResponse(list.subList(start,end),Math.min(page,amountOfPages), amountOfPages);
+    }
+
 }
