@@ -4,7 +4,9 @@ import java.util.List;
 
 public class ALSUtilities {
 
-    public static int D = 10;
+    public static int D = 1;
+
+    public static final double Lambda = 0.1;
 
     public static int[] getIndex(int[] column) {
         List<Integer> temp = new ArrayList<>();
