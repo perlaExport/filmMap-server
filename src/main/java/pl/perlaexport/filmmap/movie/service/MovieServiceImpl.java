@@ -62,6 +62,8 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
+        if (user.isToWatchLaterMovie(movie))
+            user.getWatchLaterMovies().remove(movie);
         Optional<RatingEntity> userRating = movie.getRatings().stream().
                 filter(r -> user.equals(r.getUser())).findAny();
         if (userRating.isEmpty()) {
