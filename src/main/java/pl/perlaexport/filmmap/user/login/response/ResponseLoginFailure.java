@@ -1,11 +1,17 @@
 package pl.perlaexport.filmmap.user.login.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-public class ResponseLoginFailure extends ResponseLogin{
-    public String email;
-    public String password;
+@Data
+@NoArgsConstructor
+public class ResponseLoginFailure {
+    public String email = "Bad email";
+    public String password = "Bad password";
 
+    public ResponseLoginFailure(String email){
+        this.email = email;
+    }
 }

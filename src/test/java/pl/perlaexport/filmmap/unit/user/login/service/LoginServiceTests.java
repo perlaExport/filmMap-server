@@ -13,7 +13,6 @@ import pl.perlaexport.filmmap.security.jwt.TokenProvider;
 import pl.perlaexport.filmmap.user.login.dto.LoginDto;
 import pl.perlaexport.filmmap.user.login.response.ResponseLogin;
 import pl.perlaexport.filmmap.user.login.response.ResponseLoginFailure;
-import pl.perlaexport.filmmap.user.login.response.ResponseLoginSuccess;
 import pl.perlaexport.filmmap.user.login.service.LoginServiceImpl;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
@@ -66,7 +65,6 @@ public class LoginServiceTests {
 
         //then
         assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginSuccess);
         verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(tokenProvider, times(1)).createToken(any(Authentication.class));
     }
@@ -84,7 +82,6 @@ public class LoginServiceTests {
 
         //then
         assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginFailure);
     }
 
     @Test
@@ -100,6 +97,5 @@ public class LoginServiceTests {
 
         //then
         assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginFailure);
     }
 }
