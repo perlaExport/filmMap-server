@@ -1,0 +1,1 @@
+INSERT INTO users VALUES ("1",0,"a",true,"n","p")
