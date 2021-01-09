@@ -1,6 +1,5 @@
 package pl.perlaexport.filmmap.unit.als;
 import java.util.Arrays;
-import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Test;
 import pl.perlaexport.filmmap.als.ALSUtilities;
 

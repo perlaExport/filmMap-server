@@ -11,9 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.perlaexport.filmmap.security.jwt.TokenProvider;
 import pl.perlaexport.filmmap.user.login.dto.LoginDto;
+import pl.perlaexport.filmmap.user.login.exception.BadEmailException;
+import pl.perlaexport.filmmap.user.login.exception.BadPasswordException;
 import pl.perlaexport.filmmap.user.login.response.ResponseLogin;
-import pl.perlaexport.filmmap.user.login.response.ResponseLoginFailure;
-import pl.perlaexport.filmmap.user.login.response.ResponseLoginSuccess;
 import pl.perlaexport.filmmap.user.login.service.LoginServiceImpl;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
@@ -21,8 +21,6 @@ import pl.perlaexport.filmmap.user.repository.UserRepository;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -66,7 +64,6 @@ public class LoginServiceTests {
 
         //then
         assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginSuccess);
         verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(tokenProvider, times(1)).createToken(any(Authentication.class));
     }
@@ -79,12 +76,10 @@ public class LoginServiceTests {
         loginDto.setPassword("password");
         given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
         given(passwordEncoder.matches(anyString(),anyString())).willReturn(true);
-        //when
-        ResponseLogin response = loginService.login(loginDto);
 
         //then
-        assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginFailure);
+        assertThrows(BadEmailException.class, () ->
+                loginService.login(loginDto));
     }
 
     @Test
@@ -95,11 +90,10 @@ public class LoginServiceTests {
         loginDto.setPassword("password");
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(),anyString())).willReturn(false);
-        //when
-        ResponseLogin response = loginService.login(loginDto);
 
         //then
-        assertNotNull(response);
-        assertTrue(response instanceof ResponseLoginFailure);
+        BadPasswordException thrown = assertThrows(BadPasswordException.class, () ->
+                loginService.login(loginDto));
+        assertEquals(thrown.getMessage(),user.getEmail());
     }
 }

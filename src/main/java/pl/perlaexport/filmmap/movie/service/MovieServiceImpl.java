@@ -16,7 +16,6 @@ import pl.perlaexport.filmmap.rating.exception.RatingNotFoundException;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.user.model.UserEntity;
-import pl.perlaexport.filmmap.user.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieResponse addMovie(MovieDto movieDto, UserEntity user) {
+    public MovieResponse addMovie(MovieDto movieDto) {
         if (movieRepository.findById(movieDto.getId()).isPresent())
             throw new MovieAlreadyExistsException(movieDto.getId());
         MovieEntity movie = MovieEntity.builder().id(movieDto.getId()).

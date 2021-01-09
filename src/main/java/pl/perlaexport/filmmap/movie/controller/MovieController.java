@@ -3,7 +3,6 @@ package pl.perlaexport.filmmap.movie.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
-import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.movie.service.MovieService;
 import pl.perlaexport.filmmap.user.current.CurrentUser;
@@ -22,7 +21,7 @@ public class MovieController {
     }
     @PostMapping("/movie/add")
     public MovieResponse addMovie(@Valid @RequestBody MovieDto movieDto, HttpServletRequest request){
-        return movieService.addMovie(movieDto, CurrentUser.get(request));
+        return movieService.addMovie(movieDto);
     }
     @PutMapping("/movie/{id}/rate")
     public MovieResponse rateMovie(@PathVariable String id, @RequestParam(name="rate") Integer rate,

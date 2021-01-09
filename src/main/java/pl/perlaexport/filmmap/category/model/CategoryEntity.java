@@ -1,14 +1,11 @@
 package pl.perlaexport.filmmap.category.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
-import pl.perlaexport.filmmap.rating.model.RatingEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
