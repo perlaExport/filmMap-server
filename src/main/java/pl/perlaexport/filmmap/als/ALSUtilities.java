@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ALSUtilities {
 
-    public static int D = 10;
+    public static final int D = 10;
 
     public static int[] getIndex(int[] column) {
         List<Integer> temp = new ArrayList<>();
@@ -130,8 +130,8 @@ public class ALSUtilities {
 
     public static double[] getVector(int[] indexes, double[][] matrix, int[] column) {
         double[] result = new double[D];
-        for (int i = 0; i < indexes.length; i++) {
-            result = sumMatrixesOneDim(result, multiplyMatrixesByNumberOneDim(column[indexes[i]], getColumnDouble(matrix, indexes[i])));
+        for (int index : indexes) {
+            result = sumMatrixesOneDim(result, multiplyMatrixesByNumberOneDim(column[index], getColumnDouble(matrix, index)));
         }
         return result;
     }
@@ -152,8 +152,8 @@ public class ALSUtilities {
 
     public static double getNorm(double[] matrix) {
         double result = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            result += Math.pow(matrix[i], 2);
+        for (double v : matrix) {
+            result += Math.pow(v, 2);
         }
         result = Math.sqrt(result);
         return result;

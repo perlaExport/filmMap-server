@@ -1,6 +1,5 @@
 package pl.perlaexport.filmmap.unit.user.registration.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.perlaexport.filmmap.security.exception.EmailNotFoundException;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.registration.dto.RegistrationDto;
 import pl.perlaexport.filmmap.user.registration.exception.EmailIsAlreadyTakenException;
@@ -22,7 +20,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -71,9 +68,7 @@ public class RegistrationServiceTests {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
 
         //when
-        Throwable result = assertThrows(EmailIsAlreadyTakenException.class, () -> {
-            service.register(accountDto);
-        });
+        Throwable result = assertThrows(EmailIsAlreadyTakenException.class, () -> service.register(accountDto));
 
         //then
         assertEquals(new EmailIsAlreadyTakenException(accountDto.getEmail()).getMessage(), result.getMessage());
@@ -90,9 +85,7 @@ public class RegistrationServiceTests {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
 
         //when
-        Throwable result = assertThrows(PasswordNotMatchesException.class, () -> {
-            service.register(accountDto);
-        });
+        Throwable result = assertThrows(PasswordNotMatchesException.class, () -> service.register(accountDto));
 
         //then
         assertEquals(new PasswordNotMatchesException().getMessage(), result.getMessage());

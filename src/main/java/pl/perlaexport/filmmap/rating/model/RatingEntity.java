@@ -1,6 +1,4 @@
 package pl.perlaexport.filmmap.rating.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +7,6 @@ import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity

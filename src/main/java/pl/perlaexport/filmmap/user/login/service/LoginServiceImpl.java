@@ -13,7 +13,6 @@ import pl.perlaexport.filmmap.user.login.exception.BadEmailException;
 import pl.perlaexport.filmmap.user.login.exception.BadPasswordException;
 import pl.perlaexport.filmmap.user.login.response.ResponseLogin;
 import pl.perlaexport.filmmap.user.model.UserEntity;
-import pl.perlaexport.filmmap.user.registration.exception.PasswordNotMatchesException;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
 
 @Service
