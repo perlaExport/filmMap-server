@@ -95,7 +95,7 @@ public class MovieListsServiceImpl implements MovieListsService {
             return new MovieListResponse(new ArrayList<>(),1,1);
         Collections.reverse(list);
         int listSize = list.size();
-        int start = Math.min(page * limit, listSize - 1);
+        int start = page * limit >= listSize ?  (page - 1) * limit : page * limit;
         int end = Math.min(page * limit + limit, listSize);
         int amountOfPages = (int) Math.ceil((double) listSize / limit);
         return new MovieListResponse(list.subList(start,end),Math.min(page,amountOfPages), amountOfPages);
