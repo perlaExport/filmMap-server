@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.perlaexport.filmmap.security.jwt.RestAuthenticationEntryPoint;
 import pl.perlaexport.filmmap.security.jwt.TokenAuthenticationFilter;
 import pl.perlaexport.filmmap.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -21,6 +24,8 @@ import pl.perlaexport.filmmap.security.oauth2.OAuth2FailureHandler;
 import pl.perlaexport.filmmap.security.oauth2.OAuth2SuccessHandler;
 import pl.perlaexport.filmmap.security.service.CustomOAuth2UserService;
 import pl.perlaexport.filmmap.security.service.CustomUserDetailsService;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -80,6 +85,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -98,7 +115,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**").permitAll().antMatchers("/register").permitAll()
+                .antMatchers("/login/**").permitAll().
+                antMatchers("/register").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .anyRequest()
                 .authenticated()
