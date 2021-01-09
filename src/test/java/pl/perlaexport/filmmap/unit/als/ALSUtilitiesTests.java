@@ -67,25 +67,6 @@ public class ALSUtilitiesTests {
     }
 
     @Test
-    public void createFromIndexesTest() {
-        double[][] expected = new double[][] {
-                {5,5,5,5,5,5,5,5,5,5},
-                {3,4,3,3,3,3,3,3,3,3},
-                {3,3,3,3,3,3,3,3,3,3},
-                {5,5,5,5,5,5,5,5,5,5},
-                {5,5,5,5,5,5,5,5,5,5},
-                {4,4,4,4,4,4,4,4,4,4},
-                {4,4,4,4,4,4,4,4,4,4},
-                {5,0,5,5,5,5,5,5,5,5},
-                {0,4,0,0,0,0,0,0,0,0},
-                {1,1,1,1,1,1,1,1,1,1}
-        };
-        double[][] actual = ALSUtilities.createFromIndexes(matrixD, column);
-
-        assertTrue(Arrays.deepEquals(expected,actual));
-    }
-
-    @Test
     public void transposeTest() {
         double[][] given = new double[][] {
                 {5,1,3},
