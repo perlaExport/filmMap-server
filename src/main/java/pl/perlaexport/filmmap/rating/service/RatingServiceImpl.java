@@ -6,6 +6,7 @@ import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
+import pl.perlaexport.filmmap.rating.dto.ReviewDto;
 import pl.perlaexport.filmmap.rating.exception.BadRatingRangeException;
 import pl.perlaexport.filmmap.rating.exception.RatingNotFoundException;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
@@ -65,13 +66,29 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public MovieResponse reviewMovie(String review, String movieId, UserEntity user) {
-        return null;
+    public MovieResponse reviewMovie(ReviewDto review, String movieId, UserEntity user) {
+        MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
+                () -> new MovieNotFoundException(movieId));
+        RatingEntity rating = ratingRepository.findByMovieAndUser(movie, user).orElseThrow(
+                () -> new RatingNotFoundException(movieId, user.getEmail()));
+        rating.setReview(review.getReview());
+        ratingRepository.save(rating);
+        return MovieResponse.builder().movieId(movieId).userRate(rating.getRating()).
+                avgRate(movie.getRating()).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).build();
     }
 
     @Override
     public MovieResponse deleteReview(String movieId, UserEntity user) {
-        return null;
+        MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
+                () -> new MovieNotFoundException(movieId));
+        RatingEntity rating = ratingRepository.findByMovieAndUser(movie, user).orElseThrow(
+                () -> new RatingNotFoundException(movieId, user.getEmail()));
+        rating.setReview(null);
+        ratingRepository.save(rating);
+        return MovieResponse.builder().movieId(movieId).userRate(rating.getRating()).
+                avgRate(movie.getRating()).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).build();
     }
 
     private int validRating(Integer rating) {

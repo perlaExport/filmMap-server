@@ -30,5 +30,6 @@ public class RatingEntity {
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    private String review;
 
 }
