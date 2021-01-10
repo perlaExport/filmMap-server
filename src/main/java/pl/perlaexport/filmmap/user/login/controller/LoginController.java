@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RestController
 public class LoginController {
 
-    private LoginService loginService;
+    private final LoginService loginService;
 
     @Autowired
     public LoginController(LoginService loginService) {

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RestController
 public class RegistrationController {
 
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService) {

@@ -9,9 +9,5 @@ public interface MovieService {
 
     MovieResponse getMovie(String movieId, UserEntity user);
 
-    MovieResponse rateMovie(String movieId, Integer rating, UserEntity user);
-
-    MovieResponse deleteRating(String movieId, UserEntity user);
-
     MovieResponse getRandomMovie(UserEntity user);
 }

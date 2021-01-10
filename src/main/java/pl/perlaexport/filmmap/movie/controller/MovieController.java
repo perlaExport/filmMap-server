@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RestController
 public class MovieController {
 
-    private MovieService movieService;
+    private final MovieService movieService;
 
     @Autowired
     public MovieController(MovieService movieService) {
@@ -23,15 +23,7 @@ public class MovieController {
     public MovieResponse addMovie(@Valid @RequestBody MovieDto movieDto, HttpServletRequest request){
         return movieService.addMovie(movieDto);
     }
-    @PutMapping("/movie/{id}/rate")
-    public MovieResponse rateMovie(@PathVariable String id, @RequestParam(name="rate") Integer rate,
-                                 HttpServletRequest request){
-        return movieService.rateMovie(id,rate,CurrentUser.get(request));
-    }
-    @DeleteMapping("/movie/{id}/delete_rate")
-    public MovieResponse deleteRating(@PathVariable String id,HttpServletRequest request){
-        return movieService.deleteRating(id, CurrentUser.get(request));
-    }
+
     @GetMapping("/movie/{id}")
     public MovieResponse getMovie(@PathVariable String id, HttpServletRequest request){
         return movieService.getMovie(id,CurrentUser.get(request));

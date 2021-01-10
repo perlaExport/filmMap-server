@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class MovieListsServiceImpl implements MovieListsService {
 
-    private UserRepository userRepository;
-    private MovieRepository movieRepository;
+    private final UserRepository userRepository;
+    private final MovieRepository movieRepository;
 
     @Autowired
     public MovieListsServiceImpl(UserRepository userRepository, MovieRepository movieRepository) {

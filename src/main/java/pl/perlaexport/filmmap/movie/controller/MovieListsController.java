@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class MovieListsController {
 
-    private MovieListsService movieListsService;
+    private final MovieListsService movieListsService;
 
     @Autowired
     public MovieListsController(MovieListsService movieListsService) {

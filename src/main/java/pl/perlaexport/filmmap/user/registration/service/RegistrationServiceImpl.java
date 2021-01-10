@@ -13,8 +13,8 @@ import pl.perlaexport.filmmap.user.repository.UserRepository;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public RegistrationServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
