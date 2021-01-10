@@ -18,4 +18,5 @@ public interface MovieListsService {
     MovieListResponse getUserWatchLaterMovies(UserEntity user, int limit, int page);
 
     MovieListResponse getUserRatedMovies(UserEntity user, int limit, int page);
+
 }

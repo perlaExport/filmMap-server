@@ -33,8 +33,11 @@ public class MovieListsServiceImpl implements MovieListsService {
         );
         user.getFavouriteMovies().add(movie);
         userRepository.save(user);
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movieId).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isWatchLater(user.isToWatchLaterMovie(movie)).
+                userRate(userRate).userReview(userReview).isWatchLater(user.isToWatchLaterMovie(movie)).
                 isFavourite(true).build();
     }
 
@@ -45,8 +48,11 @@ public class MovieListsServiceImpl implements MovieListsService {
         );
         user.getFavouriteMovies().remove(movie);
         userRepository.save(user);
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movieId).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isWatchLater(user.isToWatchLaterMovie(movie)).
+                userRate(userRate).userReview(userReview).isWatchLater(user.isToWatchLaterMovie(movie)).
                 isFavourite(false).build();
     }
 
@@ -57,8 +63,11 @@ public class MovieListsServiceImpl implements MovieListsService {
         );
         user.getWatchLaterMovies().add(movie);
         userRepository.save(user);
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movieId).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isWatchLater(true).
+                userRate(userRate).userReview(userReview).isWatchLater(true).
                 isFavourite(user.isFavouriteMovie(movie)).build();
     }
 
@@ -69,8 +78,11 @@ public class MovieListsServiceImpl implements MovieListsService {
         );
         user.getWatchLaterMovies().remove(movie);
         userRepository.save(user);
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movieId).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isWatchLater(true).
+                userRate(userRate).isWatchLater(true).
                 isFavourite(user.isFavouriteMovie(movie)).build();
     }
 
@@ -89,6 +101,7 @@ public class MovieListsServiceImpl implements MovieListsService {
         return getMovieListResponse(limit, page,
                 user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
     }
+
 
     private MovieListResponse getMovieListResponse(int limit, int page, List<MovieEntity> list) {
         if (list.isEmpty())

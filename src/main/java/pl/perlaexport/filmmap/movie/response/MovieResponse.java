@@ -13,6 +13,7 @@ public class MovieResponse {
     String movieId;
     Double avgRate;
     Integer userRate;
+    String userReview;
     @Builder.Default
     boolean isFavourite = false;
     @Builder.Default

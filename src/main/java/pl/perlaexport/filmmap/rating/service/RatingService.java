@@ -2,6 +2,7 @@ package pl.perlaexport.filmmap.rating.service;
 
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.rating.dto.ReviewDto;
+import pl.perlaexport.filmmap.rating.response.ReviewListResponse;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
 public interface RatingService {
@@ -12,4 +13,6 @@ public interface RatingService {
     MovieResponse reviewMovie(ReviewDto review, String movieId, UserEntity user);
 
     MovieResponse deleteReview(String movieId, UserEntity user);
+
+    ReviewListResponse getMovieReviews(String movieId, int limit, int page);
 }

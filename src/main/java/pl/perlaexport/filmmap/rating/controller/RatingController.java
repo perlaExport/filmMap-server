@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.rating.dto.ReviewDto;
+import pl.perlaexport.filmmap.rating.response.ReviewListResponse;
 import pl.perlaexport.filmmap.rating.service.RatingService;
 import pl.perlaexport.filmmap.user.current.CurrentUser;
 
@@ -37,7 +38,13 @@ public class RatingController {
     }
 
     @DeleteMapping("/movie/{id}/delete_review")
-    public MovieResponse reviewMovie(@PathVariable String id, HttpServletRequest request) {
+    public MovieResponse deleteReview(@PathVariable String id, HttpServletRequest request) {
         return ratingService.deleteReview(id, CurrentUser.get(request));
+    }
+
+    @GetMapping("/movie/{id}/reviews")
+    public ReviewListResponse getReviews(@PathVariable String id, @RequestParam Integer limit,
+                                         @RequestParam Integer page){
+        return ratingService.getMovieReviews(id,limit,page);
     }
 }

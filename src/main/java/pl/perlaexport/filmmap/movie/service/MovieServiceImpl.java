@@ -46,9 +46,12 @@ public class MovieServiceImpl implements MovieService {
         MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isFavourite(user.isFavouriteMovie(movie)).
-                isWatchLater(user.isToWatchLaterMovie(movie)).build();
+                userRate(userRate).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).userReview(userReview).build();
     }
 
 
