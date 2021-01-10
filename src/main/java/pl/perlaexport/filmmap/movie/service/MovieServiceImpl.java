@@ -11,10 +11,7 @@ import pl.perlaexport.filmmap.movie.exception.NotMoviesInDatabaseException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
-import pl.perlaexport.filmmap.rating.exception.BadRatingRangeException;
-import pl.perlaexport.filmmap.rating.exception.RatingNotFoundException;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
-import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
 import java.util.*;
@@ -23,17 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private CategoryRepository categoryRepository;
-    private MovieRepository movieRepository;
-    private RatingRepository ratingRepository;
+    private final CategoryRepository categoryRepository;
+    private final MovieRepository movieRepository;
 
 
     @Autowired
-    public MovieServiceImpl(CategoryRepository categoryRepository, MovieRepository movieRepository,
-                            RatingRepository ratingRepository) {
+    public MovieServiceImpl(CategoryRepository categoryRepository, MovieRepository movieRepository) {
         this.categoryRepository = categoryRepository;
         this.movieRepository = movieRepository;
-        this.ratingRepository = ratingRepository;
     }
 
     @Override
@@ -49,49 +43,17 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieResponse getMovie(String movieId, UserEntity user) {
-        MovieEntity movie =  movieRepository.findById(movieId).orElseThrow(
-                () -> new MovieNotFoundException(movieId)
-        );
-        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
-                userRate(user.getUserRate(movie)).isFavourite(user.isFavouriteMovie(movie)).
-                isWatchLater(user.isToWatchLaterMovie(movie)).build();
-    }
-
-    @Override
-    public MovieResponse rateMovie(String movieId, Integer rating, UserEntity user) {
         MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
                 () -> new MovieNotFoundException(movieId)
         );
-        Optional<RatingEntity> userRating = movie.getRatings().stream().
-                filter(r -> user.equals(r.getUser())).findAny();
-        if (userRating.isEmpty()) {
-            RatingEntity newRating = RatingEntity.builder().user(user).movie(movie).rating(validRating(rating)).build();
-            movie.getRatings().add(newRating);
-        } else
-            userRating.get().setRating(validRating(rating));
-        movie.calcRating();
-        movieRepository.save(movie);
+        Optional<RatingEntity> rating = user.getUserRate(movie);
+        int userRate = rating.map(RatingEntity::getRating).orElse(0);
+        String userReview = rating.map(RatingEntity::getReview).orElse(null);
         return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
-                userRate(rating).isFavourite(user.isFavouriteMovie(movie)).
-                isWatchLater(user.isToWatchLaterMovie(movie)).build();
+                userRate(userRate).isFavourite(user.isFavouriteMovie(movie)).
+                isWatchLater(user.isToWatchLaterMovie(movie)).userReview(userReview).build();
     }
 
-    @Override
-    public MovieResponse deleteRating(String movieId, UserEntity user) {
-        MovieEntity movie = movieRepository.findById(movieId).orElseThrow(
-                () -> new MovieNotFoundException(movieId)
-        );
-        RatingEntity rating = ratingRepository.findByMovieAndUser(movie,user).orElseThrow(
-                () -> new RatingNotFoundException(movieId,user.getEmail())
-        );
-        movie.getRatings().remove(rating);
-        movie.calcRating();
-        movieRepository.save(movie);
-        ratingRepository.delete(rating);
-        return MovieResponse.builder().movieId(movie.getId()).avgRate(movie.getRating()).
-                userRate(0).isFavourite(user.isFavouriteMovie(movie)).
-                isWatchLater(user.isToWatchLaterMovie(movie)).build();
-    }
 
     @Override
     public MovieResponse getRandomMovie(UserEntity user) {
@@ -118,11 +80,4 @@ public class MovieServiceImpl implements MovieService {
         }
         return finalCategories;
     }
-
-    private int validRating(Integer rating) {
-        if (rating < 1 || rating > 5)
-            throw new BadRatingRangeException(rating);
-        return rating;
-    }
-
 }

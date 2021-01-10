@@ -15,7 +15,7 @@ public class TokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
 
     public TokenProvider(AuthProperties authProperties) {
         this.authProperties = authProperties;

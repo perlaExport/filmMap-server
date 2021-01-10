@@ -37,15 +37,15 @@ import java.util.List;
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    private CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
-    private OAuth2SuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2SuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    private OAuth2FailureHandler oAuth2AuthenticationFailureHandler;
+    private final OAuth2FailureHandler oAuth2AuthenticationFailureHandler;
 
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
     public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService customOAuth2UserService, OAuth2SuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2FailureHandler oAuth2AuthenticationFailureHandler, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {

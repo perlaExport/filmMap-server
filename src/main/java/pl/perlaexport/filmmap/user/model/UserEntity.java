@@ -65,8 +65,8 @@ public class UserEntity {
     )
     List<MovieEntity> watchLaterMovies = new ArrayList<>();
 
-    public int getUserRate(MovieEntity movie){
-        return ratings.stream().filter(e -> e.getUser() == this && e.getMovie().equals(movie)).mapToInt(RatingEntity::getRating).findFirst().orElse(0);
+    public Optional<RatingEntity> getUserRate(MovieEntity movie){
+        return ratings.stream().filter(e -> e.getUser() == this && e.getMovie().equals(movie)).findFirst();
     }
 
     public boolean isFavouriteMovie(MovieEntity movie){

@@ -31,8 +31,7 @@ public class Gauss{
                 }
             }
         }
-        double[] x=backSubsti(A,B);
-        return x;
+        return backSubsti(A,B);
     }
     public static double[] backSubsti(double[][] A,double[] B){
         double [] x = new double[A.length];

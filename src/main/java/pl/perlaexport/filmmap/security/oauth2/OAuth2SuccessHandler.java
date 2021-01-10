@@ -8,7 +8,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.perlaexport.filmmap.security.config.AuthProperties;
 import pl.perlaexport.filmmap.security.jwt.TokenProvider;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +18,11 @@ import java.util.Optional;
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
 
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
 
     @Autowired
