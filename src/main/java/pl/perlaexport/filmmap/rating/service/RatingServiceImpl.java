@@ -64,6 +64,8 @@ public class RatingServiceImpl implements RatingService {
         RatingEntity rating = ratingRepository.findByMovieAndUser(movie, user).orElseThrow(
                 () -> new RatingNotFoundException(movieId, user.getEmail())
         );
+        if (user.isFavouriteMovie(movie))
+            user.getFavouriteMovies().remove(movie);
         movie.getRatings().remove(rating);
         movie.calcRating();
         movieRepository.save(movie);

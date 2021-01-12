@@ -18,4 +18,10 @@ public class RecommendationExceptionHandler {
     public ExceptionResponse getMovieAlreadyRatedException(MovieAlreadyRatedException ex){
         return new ExceptionResponse(ex.getMessage());
     }
+
+    @ExceptionHandler(NotEnoughDataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse getNotEnoughDataException(TooLessRatingsException ex){
+        return new ExceptionResponse(ex.getMessage());
+    }
 }

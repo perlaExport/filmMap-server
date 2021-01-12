@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.recommendation.service.RecommendationService;
 import pl.perlaexport.filmmap.user.current.CurrentUser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class RecommendationController {
@@ -21,5 +23,10 @@ public class RecommendationController {
     @GetMapping("/movie/{id}/recommendation")
     public Integer getMovieRecommendation(@PathVariable String id, HttpServletRequest request){
         return recommendationService.getRecommendation(id, CurrentUser.get(request));
+    }
+
+    @GetMapping("/movie/recommendation")
+    public List<MovieEntity> getTopFiveMovies(HttpServletRequest request) {
+        return recommendationService.getTopFiveRecommendation(CurrentUser.get(request));
     }
 }

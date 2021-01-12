@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.perlaexport.filmmap.als.ALS;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
+import pl.perlaexport.filmmap.movie.exception.NotMoviesInDatabaseException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.recommendation.exception.MovieAlreadyRatedException;
+import pl.perlaexport.filmmap.recommendation.exception.NotEnoughDataException;
 import pl.perlaexport.filmmap.recommendation.exception.TooLessRatingsException;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,5 +73,24 @@ public class RecommendationServiceImpl implements RecommendationService {
         return matrix;
     }
 
-
+    @Override
+    public List<MovieEntity> getTopFiveRecommendation(UserEntity user) {
+        List<RatingEntity> ratingEntities = ratingRepository.findAllByUser(user);
+        if (ratingEntities.size() < 9)
+            throw new NotEnoughDataException();
+        List<MovieEntity> allMovies = (List<MovieEntity>) movieRepository.findAll();
+        allMovies.removeAll(user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
+        List<MovieEntity> movies = allMovies.stream().map(RatingEntity::getMovie).
+                sorted(Comparator.comparingInt(o -> o.getRatings().size())).
+                limit(20).collect(Collectors.toList());
+        if (movies.isEmpty())
+            throw new NotMoviesInDatabaseException();
+        List<MovieEntity> topFiveRecommendation = new ArrayList<>();
+        for (int i = 1; i < movies.size(); i++){
+            int recommendation = getRecommendation(movies.get(i).getId(), user);
+            if (recommendation > 80) topFiveRecommendation.add(movies.get(i));
+            if (topFiveRecommendation.size() == 5) return topFiveRecommendation;
+        }
+        return topFiveRecommendation;
+    }
 }
