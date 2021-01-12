@@ -32,16 +32,15 @@ insert into users ( auth_type, email, enabled, name, password) values ('LOCAL', 
 
 insert into rating (rating, movie_id, user_id) values (5,'2',1);
 insert into rating (rating, movie_id, user_id) values (5,'3',1);
-insert into rating (rating, movie_id, user_id) values (5,'4',1);
-insert into rating (rating, movie_id, user_id) values (5,'6',1);
-insert into rating (rating, movie_id, user_id) values (5,'7',1);
+insert into rating (rating, movie_id, user_id) values (2,'4',1);
+insert into rating (rating, movie_id, user_id) values (4,'6',1);
+insert into rating (rating, movie_id, user_id) values (3,'7',1);
 insert into rating (rating, movie_id, user_id) values (5,'8',1);
 insert into rating (rating, movie_id, user_id) values (5,'9',1);
-insert into rating (rating, movie_id, user_id) values (5,'10',1);
-insert into rating (rating, movie_id, user_id) values (5,'11',1);
-insert into rating (rating, movie_id, user_id) values (5,'12',1);
+insert into rating (rating, movie_id, user_id) values (3,'10',1);
+insert into rating (rating, movie_id, user_id) values (1,'11',1);
+insert into rating (rating, movie_id, user_id) values (1,'12',1);
 insert into rating (rating, movie_id, user_id) values (5,'13',1);
-insert into rating (rating, movie_id, user_id) values (5,'14',1);
 
 insert into rating (rating, movie_id, user_id) values (5,'2',2);
 insert into rating (rating, movie_id, user_id) values (4,'2',2);

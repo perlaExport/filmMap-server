@@ -1,7 +1,7 @@
 package pl.perlaexport.filmmap.als;
 
 public class ALS {
-    public static double[][] getResult(double[][] U, double[][] P) {
+    private static double[][] getResult(double[][] U, double[][] P) {
         return ALSUtilities.multiplyMatrixes(ALSUtilities.transpose(U), P);
     }
 
