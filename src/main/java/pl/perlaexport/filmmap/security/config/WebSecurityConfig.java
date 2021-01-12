@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.perlaexport.filmmap.security.jwt.RestAuthenticationEntryPoint;
 import pl.perlaexport.filmmap.security.jwt.TokenAuthenticationFilter;
-import pl.perlaexport.filmmap.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import pl.perlaexport.filmmap.security.oauth2.OAuth2FailureHandler;
 import pl.perlaexport.filmmap.security.oauth2.OAuth2SuccessHandler;
 import pl.perlaexport.filmmap.security.service.CustomOAuth2UserService;
@@ -45,15 +44,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2FailureHandler oAuth2AuthenticationFailureHandler;
 
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
-    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService customOAuth2UserService, OAuth2SuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2FailureHandler oAuth2AuthenticationFailureHandler, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, CustomOAuth2UserService customOAuth2UserService,
+                             OAuth2SuccessHandler oAuth2AuthenticationSuccessHandler, OAuth2FailureHandler oAuth2AuthenticationFailureHandler) {
         this.customUserDetailsService = customUserDetailsService;
         this.customOAuth2UserService = customOAuth2UserService;
         this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
         this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 
     @Bean
@@ -61,10 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new TokenAuthenticationFilter();
     }
 
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -124,7 +118,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                 .and()
                 .redirectionEndpoint()
                 .baseUri("/oauth2/callback/*")
