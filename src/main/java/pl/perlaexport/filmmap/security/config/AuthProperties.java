@@ -32,16 +32,11 @@ public class AuthProperties {
     }
 
     public static final class OAuth2 {
-        private List<String> authorizedRedirectUris = new ArrayList<>();
-
+        private final List<String> authorizedRedirectUris = new ArrayList<>();
         public List<String> getAuthorizedRedirectUris() {
             return authorizedRedirectUris;
         }
 
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
-            this.authorizedRedirectUris = authorizedRedirectUris;
-            return this;
-        }
     }
 
     public Auth getAuth() {
