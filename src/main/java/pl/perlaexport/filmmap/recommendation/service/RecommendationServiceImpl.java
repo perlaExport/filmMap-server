@@ -80,16 +80,19 @@ public class RecommendationServiceImpl implements RecommendationService {
             throw new NotEnoughDataException();
         List<MovieEntity> allMovies = (List<MovieEntity>) movieRepository.findAll();
         allMovies.removeAll(user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
-        List<MovieEntity> movies = allMovies.stream().map(RatingEntity::getMovie).
-                sorted(Comparator.comparingInt(o -> o.getRatings().size())).
-                limit(20).collect(Collectors.toList());
+        List<MovieEntity> movies = allMovies.stream().sorted(Comparator.comparingInt(o -> o.getRatings().size())).limit(20).
+                collect(Collectors.toList());
         if (movies.isEmpty())
             throw new NotMoviesInDatabaseException();
         List<MovieEntity> topFiveRecommendation = new ArrayList<>();
         for (int i = 1; i < movies.size(); i++){
-            int recommendation = getRecommendation(movies.get(i).getId(), user);
-            if (recommendation > 80) topFiveRecommendation.add(movies.get(i));
-            if (topFiveRecommendation.size() == 5) return topFiveRecommendation;
+            try {
+                int recommendation = getRecommendation(movies.get(i).getId(), user);
+                if (recommendation > 30) topFiveRecommendation.add(movies.get(i));
+                if (topFiveRecommendation.size() == 5) return topFiveRecommendation;
+            }
+            catch (TooLessRatingsException ex){
+            }
         }
         return topFiveRecommendation;
     }
