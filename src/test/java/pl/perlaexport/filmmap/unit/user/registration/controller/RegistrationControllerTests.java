@@ -54,7 +54,6 @@ public class RegistrationControllerTests {
         dto.setPassword("password");
         dto.setMatchingPassword("password");
 
-        given(registrationService.register(dto)).willReturn(user);
 
         mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)

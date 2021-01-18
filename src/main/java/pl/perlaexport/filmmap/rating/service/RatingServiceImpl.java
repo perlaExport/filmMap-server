@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.perlaexport.filmmap.movie.exception.MovieNotFoundException;
 import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
-import pl.perlaexport.filmmap.movie.response.MovieListResponse;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
 import pl.perlaexport.filmmap.rating.dto.ReviewDto;
 import pl.perlaexport.filmmap.rating.exception.BadRatingRangeException;

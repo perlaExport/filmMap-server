@@ -7,6 +7,7 @@ import pl.perlaexport.filmmap.movie.model.MovieEntity;
 import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.movie.response.MovieListResponse;
 import pl.perlaexport.filmmap.movie.response.MovieResponse;
+import pl.perlaexport.filmmap.movie.response.RatedMovieResponse;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 import pl.perlaexport.filmmap.user.repository.UserRepository;
@@ -99,11 +100,11 @@ public class MovieListsServiceImpl implements MovieListsService {
     @Override
     public MovieListResponse getUserRatedMovies(UserEntity user, int limit, int page) {
         return getMovieListResponse(limit, page,
-                user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
+                user.getRatings().stream().map(r -> new RatedMovieResponse(r.getMovie(), r.getRating())).collect(Collectors.toList()));
     }
 
 
-    private MovieListResponse getMovieListResponse(int limit, int page, List<MovieEntity> list) {
+    private MovieListResponse getMovieListResponse(int limit, int page, List<?> list) {
         if (list.isEmpty())
             return new MovieListResponse(new ArrayList<>(),1,1);
         Collections.reverse(list);

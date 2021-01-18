@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RecommendationService {
     Integer getRecommendation(String movieId, UserEntity user);
-    List<MovieEntity> getTopFiveRecommendation(UserEntity user);
+    List<MovieEntity> getTopRecommendations(UserEntity user, int size);
 }

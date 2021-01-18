@@ -10,7 +10,6 @@ import pl.perlaexport.filmmap.movie.repository.MovieRepository;
 import pl.perlaexport.filmmap.rating.model.RatingEntity;
 import pl.perlaexport.filmmap.rating.repository.RatingRepository;
 import pl.perlaexport.filmmap.recommendation.exception.MovieAlreadyRatedException;
-import pl.perlaexport.filmmap.recommendation.exception.NotEnoughDataException;
 import pl.perlaexport.filmmap.recommendation.exception.TooLessRatingsException;
 import pl.perlaexport.filmmap.user.model.UserEntity;
 
@@ -37,7 +36,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             throw new MovieAlreadyRatedException(movieId);
         int [][] matrix = getRecommendationMatrix(movie,user);
         double [][] newMatrix = ALS.getALS(matrix);
-        return (int) Math.min(newMatrix[0][0]/5 * 100,100);
+        return (int) Math.max(0,Math.min(newMatrix[0][0]/5 * 100,100));
     }
 
     private int [][] getRecommendationMatrix(MovieEntity movie, UserEntity user){
@@ -74,26 +73,33 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public List<MovieEntity> getTopFiveRecommendation(UserEntity user) {
+    public List<MovieEntity> getTopRecommendations(UserEntity user, int size) {
         List<RatingEntity> ratingEntities = ratingRepository.findAllByUser(user);
         if (ratingEntities.size() < 9)
-            throw new NotEnoughDataException();
+           return getTopMovies(size, user);
         List<MovieEntity> allMovies = (List<MovieEntity>) movieRepository.findAll();
         allMovies.removeAll(user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
-        List<MovieEntity> movies = allMovies.stream().sorted(Comparator.comparingInt(o -> o.getRatings().size())).limit(20).
+        List<MovieEntity> movies = allMovies.stream().sorted(Comparator.comparingInt(o -> o.getRatings().size())).limit(3L * size).
                 collect(Collectors.toList());
         if (movies.isEmpty())
             throw new NotMoviesInDatabaseException();
-        List<MovieEntity> topFiveRecommendation = new ArrayList<>();
-        for (int i = 1; i < movies.size(); i++){
+        List<MovieEntity> topRecommendation = new ArrayList<>();
+        for (MovieEntity movie : movies) {
             try {
-                int recommendation = getRecommendation(movies.get(i).getId(), user);
-                if (recommendation > 30) topFiveRecommendation.add(movies.get(i));
-                if (topFiveRecommendation.size() == 5) return topFiveRecommendation;
-            }
-            catch (TooLessRatingsException ex){
+                int recommendation = getRecommendation(movie.getId(), user);
+                if (recommendation > 80) topRecommendation.add(movie);
+                if (topRecommendation.size() == size) return topRecommendation;
+            } catch (TooLessRatingsException ignored) {
             }
         }
-        return topFiveRecommendation;
+        if (topRecommendation.isEmpty())
+            return getTopMovies(size,user);
+        return topRecommendation;
+    }
+
+    private List<MovieEntity> getTopMovies(int size, UserEntity user){
+        List<MovieEntity> movies = (List<MovieEntity>) movieRepository.findAll();
+        movies.removeAll(user.getRatings().stream().map(RatingEntity::getMovie).collect(Collectors.toList()));
+        return movies.stream().sorted(Comparator.comparingDouble(MovieEntity::getRating).reversed()).limit(size).collect(Collectors.toList());
     }
 }

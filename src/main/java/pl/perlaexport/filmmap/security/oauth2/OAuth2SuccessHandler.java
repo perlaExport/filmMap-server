@@ -8,12 +8,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.perlaexport.filmmap.security.config.AuthProperties;
 import pl.perlaexport.filmmap.security.jwt.TokenProvider;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URI;
-import java.util.Optional;
 
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
