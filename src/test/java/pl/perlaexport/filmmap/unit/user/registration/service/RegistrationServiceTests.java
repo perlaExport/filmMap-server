@@ -52,7 +52,7 @@ public class RegistrationServiceTests {
         given(userRepository.save(any(UserEntity.class))).willReturn(user);
 
         //when
-        UserEntity result = service.register(accountDto);
+        service.register(accountDto);
 
         //then
         then(userRepository).should().findByEmail(anyString());

@@ -66,7 +66,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setAuthType(AuthType.GOOGLE);
         user.setName(googleUser.getName());
         user.setEmail(googleUser.getEmail());
-        user.setName(googleUser.getName());
+        user.setName(googleUser.getName().split(" ")[0]);
         user.setEnabled(true);
         return userRepository.save(user);
     }

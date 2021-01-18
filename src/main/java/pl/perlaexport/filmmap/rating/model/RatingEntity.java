@@ -8,6 +8,7 @@ import pl.perlaexport.filmmap.user.model.UserEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Data
@@ -30,6 +31,8 @@ public class RatingEntity {
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Size(max=1000)
     private String review;
 
 }
