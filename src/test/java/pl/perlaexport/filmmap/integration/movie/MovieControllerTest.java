@@ -26,6 +26,8 @@ public class MovieControllerTest extends IntegrationBase {
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJson(movieDto)))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -37,11 +39,13 @@ public class MovieControllerTest extends IntegrationBase {
 
         String token = authenticateUser(DEFAULT_USERNAME, DEFAULT_PASSWORD);
 
-        mockMvc.perform(get("/movie/add")
+        mockMvc.perform(post("/movie/add")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJson(movieDto)))
                 .andExpect(jsonPath("$.message", is("Movie with id: 15 already exists")))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
                 .andExpect(status().isConflict())
                 .andDo(print());
     }
@@ -55,6 +59,8 @@ public class MovieControllerTest extends IntegrationBase {
 
         mockMvc.perform(get("/movie/" + id)
                 .header("Authorization", "Bearer " + token))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -82,6 +88,8 @@ public class MovieControllerTest extends IntegrationBase {
 
         mockMvc.perform(get("/movie/random")
                 .header("Authorization", "Bearer " + token))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
