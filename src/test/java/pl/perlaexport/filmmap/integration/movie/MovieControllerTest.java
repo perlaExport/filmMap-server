@@ -2,18 +2,12 @@ package pl.perlaexport.filmmap.integration.movie;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import pl.perlaexport.filmmap.integration.IntegrationBase;
 import pl.perlaexport.filmmap.movie.dto.MovieDto;
-
 import javax.transaction.Transactional;
-
-import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -91,6 +85,4 @@ public class MovieControllerTest extends IntegrationBase {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
-    
 }
